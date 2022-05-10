@@ -5,7 +5,7 @@
   "scripts": {
     "format": "prettier --write '*/**/*.*{js,json,md,ts}'",
     "format:check": "prettier --check '*/**/*.*{js,json,md,ts}'",
-    "lint": "eslint -c .eslintrc.json --ext \"**/*.ts\" \"**/*.test.ts\"",
+    "lint": "eslint -c .eslintrc.json --ext \"**/*.ts\"",
     "create-task-predefined-input": "npx hardhat run examples/create-task-predefined-input.ts",
     "create-task-with-resolver": "npx hardhat run examples/create-task-with-resolver.ts",
     "create-timed-task": "npx hardhat run examples/create-timed-task.ts",
