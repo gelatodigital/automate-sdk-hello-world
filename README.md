@@ -1,13 +1,14 @@
 # Gelato Ops SDK Hello World <!-- omit in toc -->
 
-Example task creations using Gelato Ops SDK:
-
-- [1. Create a task with pre-define input (run whenever possible)](#1-create-a-task-with-pre-define-input-run-whenever-possible)
-- [2. Create a task using a resolver contract](#2-create-a-task-using-a-resolver-contract)
-- [3. Create a time based task](#3-create-a-time-based-task)
-- [4. Create a time based task with a resolver for dynamic input](#4-create-a-time-based-task-with-a-resolver-for-dynamic-input)
-- [5. Create a self paying task](#5-create-a-self-paying-task)
-- [6. Manage your tasks](#6-manage-your-tasks)
+Example task automation using Gelato Ops SDK:
+- [Deploy a contract & automate your function call](#deploy-a-contract--automate-your-function-call)
+- [Configure your task execution:](#configure-your-task-execution)
+  - [1. Use pre-define input (run whenever possible)](#1-use-pre-define-input-run-whenever-possible)
+  - [2. Use dynamic input with a resolver contract](#2-use-dynamic-input-with-a-resolver-contract)
+  - [3. Time based execution](#3-time-based-execution)
+  - [4. Time based execution using a resolver for dynamic input](#4-time-based-execution-using-a-resolver-for-dynamic-input)
+  - [5. Self paying task](#5-self-paying-task)
+- [Manage your tasks](#manage-your-tasks)
 
   
 ## Prerequisite  <!-- omit in toc -->
@@ -29,9 +30,35 @@ PRIVATE_KEY=
 ALCHEMY_ID= <- required for ropsten & rinkeby
 ```
 
-## Examples  <!-- omit in toc -->
+## Deploy a contract & automate your function call
 
-## 1. Create a task with pre-define input (run whenever possible)
+- Use `gelatoOps.createTask` and specify your contract call with `execAddress`, `execSelector` & `execData`:
+```ts
+  // Deploying Counter contract
+  const counterFactory = await hre.ethers.getContractFactory("Counter");
+  const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].ops);
+  await counter.deployed();
+
+  // Call Counter.increaseCount(42) every 10 minutes
+  const res: TaskReceipt = await gelatoOps.createTask({
+    execAddress: counter.address,
+    execSelector: counter.interface.getSighash("increaseCount(uint256)"),
+    execData: counter.interface.encodeFunctionData("increaseCount", [42]),
+    execAbi: counter.interface.format("json") as string,
+    interval: 10 * 60, // execute every 10 minutes
+    name: "Automated counter every 10min",
+  });
+```
+
+- Check the example source code [`examples/deploy-create-task.ts`](./examples/deploy-create-task.ts) and try it yourself using:
+```
+yarn run deploy-create-task --network rinkeby
+```
+
+
+## Configure your task execution:
+
+### 1. Use pre-define input (run whenever possible)
 
 - Use `gelatoOps.createTask` and specify your contract call with `execAddress`, `execSelector` & `execData`:
 ```ts
@@ -56,7 +83,7 @@ yarn run create-task-predefined-input --network rinkeby
 <br/>
 
 
-## 2. Create a task using a resolver contract
+### 2. Use dynamic input with a resolver contract
 
 - Use `gelatoOps.createTask` and specify your resolver function with `resolverAddress` & `resolverData`:
 ```ts
@@ -83,7 +110,7 @@ yarn run create-task-with-resolver --network rinkeby
 <br/>
 
 
-## 3. Create a time based task
+### 3. Time based execution 
 
 - Use `gelatoOps.createTask` with your execution `interval` & set your optional `startTime`:
 ```ts
@@ -113,7 +140,7 @@ yarn run create-timed-task --network rinkeby
 <br/>
 
 
-## 4. Create a time based task with a resolver for dynamic input
+### 4. Time based execution using a resolver for dynamic input
 
 - Use `gelatoOps.createTask` with your execution `interval` & set your resolver function with `resolverAddress` & `resolverData`:
 ```ts
@@ -142,7 +169,7 @@ yarn run create-timed-task-with-resolver --network rinkeby
 ```
 <br/>
 
-## 5. Create a self paying task 
+### 5. Self paying task 
 
 - Use `gelatoOps.createTask` and set `useTreasury: false` to let the task pay for itself:
 ```ts
@@ -170,7 +197,7 @@ yarn run create-self-paying-task --network rinkeby
 ```
 <br/>
 
-## 6. Manage your tasks
+## Manage your tasks
 
 - Use `gelatoOps.getActiveTasks` to retrieve all active that you created:
 ```ts
