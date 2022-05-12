@@ -11,12 +11,14 @@
     "create-timed-task": "npx hardhat run examples/create-timed-task.ts",
     "create-timed-task-with-resolver": "npx hardhat run examples/create-timed-task-with-resolver.ts",
     "create-self-paying-task": "npx hardhat run examples/create-self-paying-task.ts",
+    "deploy-create-task": "npx hardhat run examples/deploy-create-task.ts",
     "manage-tasks": "npx hardhat run examples/manage-tasks.ts"
   },
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-waffle": "2.0.1",
+    "@openzeppelin/contracts": "^4.6.0",
     "@tsconfig/recommended": "1.0.1",
     "@types/node": "16.7.10",
     "@typescript-eslint/eslint-plugin": "4.30.0",
@@ -38,6 +40,6 @@
     "*.*{ts,js}": "eslint -c .eslintrc.json"
   },
   "dependencies": {
-    "@gelatonetwork/ops-sdk": "^0.1.0"
+    "@gelatonetwork/ops-sdk": "^0.0.1"
   }
 }
