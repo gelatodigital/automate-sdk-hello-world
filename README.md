@@ -40,7 +40,7 @@ ALCHEMY_ID= <- required for ropsten & rinkeby
   await counter.deployed();
 
   // Call Counter.increaseCount(42) every 10 minutes
-  const res: TaskReceipt = await gelatoOps.createTask({
+  const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
     execAddress: counter.address,
     execSelector: counter.interface.getSighash("increaseCount(uint256)"),
     execData: counter.interface.encodeFunctionData("increaseCount", [42]),
@@ -68,7 +68,7 @@ const selector = counter.interface.getSighash("increaseCount(uint256)");
 const data = counter.interface.encodeFunctionData("increaseCount", [42]);
 
 // Create task
-const res: TaskReceipt = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
   execData: data,
@@ -94,7 +94,7 @@ const selector = counter.interface.getSighash("increaseCount(uint256)");
 const resolverData = resolver.interface.getSighash("checker()");
 
 // Create task
-const res: TaskReceipt = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: resolver.address,
@@ -123,7 +123,7 @@ const interval = 5 * 60; // exec every 5 minutes
 
 // Create task
 console.log("Creating Timed Task...");
-const res: TaskReceipt = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
   execData,
@@ -153,7 +153,7 @@ const interval = 5 * 60; // exec every 5 minutes
 
 // Create task
 console.log("Creating Timed Task...");
-const res: TaskReceipt = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: resolver.address,
@@ -181,7 +181,7 @@ const resolverData = resolver.interface.getSighash("checker()");
 
 // Create task
 console.log("Creating Task...");
-const res: TaskReceipt = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: resolver.address,
