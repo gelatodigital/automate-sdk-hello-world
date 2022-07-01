@@ -889,10 +889,10 @@
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
-"@gelatonetwork/ops-sdk@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@gelatonetwork/ops-sdk/-/ops-sdk-0.0.1.tgz#a02462003540d6c73b4369acba0d5527e32878a4"
-  integrity sha512-1IesBzfGaDHDFbragjnc6ri7fJ4vNiKKB8KZdu8C8OIEkDH0OmLuas8lHzZ4pYYtA0DWd7tBo0dXcTd1T/quyw==
+"@gelatonetwork/ops-sdk@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@gelatonetwork/ops-sdk/-/ops-sdk-1.0.0.tgz#b77de58abb6b1a981dc3544eb13ab0771ee8e0c5"
+  integrity sha512-M6ttaWs8azsdYCPPq12upk/8ygPek9xpvkXNnPYE8qRw/bx7vz6MPhGePEbjN4YzaFylam70+QB7G/8tY378xg==
   dependencies:
     axios "^0.24.0"
     ethers "^5.5.2"
