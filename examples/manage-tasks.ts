@@ -1,5 +1,5 @@
 import hre from "hardhat";
-import { GelatoOpsSDK, isGelatoOpsSupported, Task, TaskReceipt } from "@gelatonetwork/ops-sdk";
+import { GelatoOpsSDK, isGelatoOpsSupported, Task, TaskTransaction } from "@gelatonetwork/ops-sdk";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
@@ -33,9 +33,10 @@ async function main() {
 
   // Cancel a task
   console.log(`Canceling task...`);
-  const res: TaskReceipt = await gelatoOps.cancelTask(task.taskId);
-  console.log(`Task canceled, taskId: ${res.taskId} (tx hash: ${res.transactionHash})`);
-  console.log(`> https://app.gelato.network/task/${res.taskId}?chainId=${chainId}`);
+  const { taskId, tx }: TaskTransaction = await gelatoOps.cancelTask(task.taskId);
+  await tx.wait();
+  console.log(`Task canceled, taskId: ${taskId} (tx hash: ${tx.hash})`);
+  console.log(`> https://app.gelato.network/task/${taskId}?chainId=${chainId}`);
 }
 
 main()

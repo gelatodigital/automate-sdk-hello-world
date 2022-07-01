@@ -1,5 +1,5 @@
 import hre from "hardhat";
-import { GelatoOpsSDK, isGelatoOpsSupported, TaskReceipt, GELATO_ADDRESSES } from "@gelatonetwork/ops-sdk";
+import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction, GELATO_ADDRESSES } from "@gelatonetwork/ops-sdk";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
@@ -21,7 +21,7 @@ async function main() {
 
   // Create Gelato automated ask
   console.log("Creating Task...");
-  const res: TaskReceipt = await gelatoOps.createTask({
+  const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
     execAddress: counter.address,
     execSelector: counter.interface.getSighash("increaseCount(uint256)"),
     execData: counter.interface.encodeFunctionData("increaseCount", [42]),
@@ -29,8 +29,9 @@ async function main() {
     interval: 10 * 60, // execute every 10 minutes
     name: "Automated counter every 10min",
   });
-  console.log(`Task created, taskId: ${res.taskId} (tx hash: ${res.transactionHash})`);
-  console.log(`> https://app.gelato.network/task/${res.taskId}?chainId=${chainId}`);
+  await tx.wait();
+  console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);
+  console.log(`> https://app.gelato.network/task/${taskId}?chainId=${chainId}`);
 }
 
 main()

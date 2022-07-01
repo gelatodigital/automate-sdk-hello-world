@@ -1,5 +1,5 @@
 import hre from "hardhat";
-import { GelatoOpsSDK, isGelatoOpsSupported, TaskReceipt } from "@gelatonetwork/ops-sdk";
+import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction } from "@gelatonetwork/ops-sdk";
 import { Contract } from "ethers";
 import { COUNTER_WITHOUT_TREASURY_ADDRESSES, COUNTER_RESOLVER_WITHOUT_TREASURY_ADDRESSES } from "../constants";
 import counterAbi from "../contracts/abis/CounterWithoutTreasury.json";
@@ -29,7 +29,7 @@ async function main() {
 
   // Create task
   console.log("Creating Task...");
-  const res: TaskReceipt = await gelatoOps.createTask({
+  const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
     execAddress: counter.address,
     execSelector: selector,
     execAbi: JSON.stringify(counterAbi),
@@ -39,8 +39,9 @@ async function main() {
     useTreasury: false,
     name: "Automated Counter without treasury",
   });
-  console.log(`Task created, taskId: ${res.taskId} (tx hash: ${res.transactionHash})`);
-  console.log(`> https://app.gelato.network/task/${res.taskId}?chainId=${chainId}`);
+  await tx.wait();
+  console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);
+  console.log(`> https://app.gelato.network/task/${taskId}?chainId=${chainId}`);
 }
 
 main()
