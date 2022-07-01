@@ -27,6 +27,12 @@ const config: HardhatUserConfig = {
       url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_ID}`,
     },
 
+    goerli: {
+      chainId: 5,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_ID}`,
+    },
+
     mumbai: {
       chainId: 80001,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
