@@ -197,6 +197,31 @@ yarn run create-self-paying-task --network rinkeby
 ```
 <br/>
 
+### 6. Proxy-based execution
+
+- Use `gelatoOps.createTask` and set `proxy: true` to have executions routed through your dedicated proxy:
+```ts
+// Prepare Task data to automate
+const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
+const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES, counterResolverAbi, signer);
+const selector = counter.interface.getSighash("increaseCount(uint256)");
+const resolverData = resolver.interface.getSighash("checker()");
+
+// Create task
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+  execAddress: counter.address,
+  execSelector: selector,
+  resolverAddress: resolver.address,
+  resolverData: resolverData,
+  proxy: true,
+  name: "Automated counter using resolver",
+});
+
+// Get dedicated proxy address to whitelist
+const { address, isDeployed } = await gelatoOps.getOpsProxyAddress()
+```
+
+
 ## Manage your tasks
 
 - Use `gelatoOps.getActiveTasks` to retrieve all active that you created:
