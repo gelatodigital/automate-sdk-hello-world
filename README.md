@@ -197,9 +197,9 @@ yarn run create-self-paying-task --network rinkeby
 ```
 <br/>
 
-### 6. Proxy-based execution
+### 6. Dedicated msg.sender
 
-- Use `gelatoOps.createTask` and set `proxy: true` to have executions routed through your dedicated proxy:
+- Use `gelatoOps.createTask` and set `dedicatedMsgSender: true` to have a didcated `msg.sender` during your task executions:
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -213,12 +213,12 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execSelector: selector,
   resolverAddress: resolver.address,
   resolverData: resolverData,
-  proxy: true,
+  dedicatedMsgSender: true,
   name: "Automated counter using resolver",
 });
 
-// Get dedicated proxy address to whitelist
-const { address, isDeployed } = await gelatoOps.getOpsProxyAddress()
+// Get dedicated msg.sender to whitelist
+const { address, isDeployed } = await gelatoOps.getDedicatedMsgSender()
 ```
 
 
