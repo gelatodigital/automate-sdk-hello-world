@@ -47,6 +47,7 @@ ALCHEMY_ID= <- required for ropsten & rinkeby
     execAbi: counter.interface.format("json") as string,
     interval: 10 * 60, // execute every 10 minutes
     name: "Automated counter every 10min",
+    dedicatedMsgSender: true
   });
 ```
 
@@ -73,6 +74,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execSelector: selector,
   execData: data,
   name: "Automated Counter with pre-defined input",
+  dedicatedMsgSender: true
 });
 ```
 
@@ -100,6 +102,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   resolverAddress: resolver.address,
   resolverData: resolverData,
   name: "Automated counter using resolver",
+  dedicatedMsgSender: true
 });
 ```
 
@@ -130,6 +133,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   startTime, // starting timestamp in seconds
   interval, // execution interval in seconds
   name: "Automated counter every 5min",
+  dedicatedMsgSender: true
 });
 ```
 
@@ -160,6 +164,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   resolverData: resolverData,
   interval, // execution interval in seconds
   name: "Automated counter with resolver every 5min",
+  dedicatedMsgSender: true
 });
 ```
 
@@ -188,6 +193,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   resolverData: resolverData,
   useTreasury: false,
   name: "Automated Counter without treasury",
+  dedicatedMsgSender: true
 });
 ```
 
@@ -215,6 +221,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   resolverData: resolverData,
   dedicatedMsgSender: true,
   name: "Automated counter using resolver",
+  dedicatedMsgSender: true
 });
 
 // Get dedicated msg.sender to whitelist
