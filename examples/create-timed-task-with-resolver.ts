@@ -33,6 +33,7 @@ async function main() {
     resolverAbi: JSON.stringify(counterResolverAbi),
     interval: 5 * 60, // interval in seconds,
     name: "Automated counter every 5min",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);

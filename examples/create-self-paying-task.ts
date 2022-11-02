@@ -38,6 +38,7 @@ async function main() {
     resolverAbi: JSON.stringify(counterResolverAbi),
     useTreasury: false,
     name: "Automated Counter without treasury",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);

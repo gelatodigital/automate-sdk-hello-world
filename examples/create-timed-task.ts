@@ -32,6 +32,7 @@ async function main() {
     startTime,
     interval,
     name: "Automated counter every 5min",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);

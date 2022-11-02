@@ -32,6 +32,7 @@ async function main() {
     resolverData: resolverData,
     resolverAbi: JSON.stringify(counterResolverAbi),
     name: "Automated counter with resolver",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);

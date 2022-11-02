@@ -28,6 +28,7 @@ async function main() {
     execAbi: JSON.stringify(counterAbi),
     execData,
     name: "Automated Counter with pre-defined input",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);

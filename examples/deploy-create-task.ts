@@ -28,6 +28,7 @@ async function main() {
     execAbi: counter.interface.format("json") as string,
     interval: 10 * 60, // execute every 10 minutes
     name: "Automated counter every 10min",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);
