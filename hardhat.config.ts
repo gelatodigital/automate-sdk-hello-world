@@ -15,22 +15,16 @@ const config: HardhatUserConfig = {
   defaultNetwork: "mumbai",
 
   networks: {
-    ropsten: {
-      chainId: 3,
-      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-      url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_ID}`,
-    },
-
-    rinkeby: {
-      chainId: 4,
-      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_ID}`,
-    },
-
     goerli: {
       chainId: 5,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_ID}`,
+    },
+
+    opgoerli: {
+      chainId: 420,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      url: `https://goerli.optimism.io`,
     },
 
     mumbai: {
