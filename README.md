@@ -8,6 +8,8 @@ Example task automation using Gelato Ops SDK:
   - [3. Time based execution](#3-time-based-execution)
   - [4. Time based execution using a resolver for dynamic input](#4-time-based-execution-using-a-resolver-for-dynamic-input)
   - [5. Self paying task](#5-self-paying-task)
+  - [6. Single execution task](#6-single-execution-tasks)
+- [msg.sender of task executions](#msgsender-of-task-executions)
 - [Manage your tasks](#manage-your-tasks)
 
   
@@ -203,9 +205,9 @@ yarn run create-self-paying-task --network rinkeby
 ```
 <br/>
 
-### 6. Dedicated msg.sender
+### 6. Single execution tasks
 
-- Use `gelatoOps.createTask` and set `dedicatedMsgSender: true` to have a didcated `msg.sender` during your task executions:
+- Use `gelatoOps.createTask` and set `singleExec: true` for tasks that only need to be executed once. The task is automatically cancelled on the first execution.
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -221,13 +223,22 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   resolverData: resolverData,
   dedicatedMsgSender: true,
   name: "Automated counter using resolver",
-  dedicatedMsgSender: true
+  dedicatedMsgSender: true,
+  singleExec: true
 });
+```
 
+## `msg.sender` of task executions
+
+If you set `dedicatedMsgSender: true`, your task will be called via a dedicated `msg.sender` which you can whitelist on your smart contract for extra security.
+
+To get your dedicated `msg.sender` :
+```ts
 // Get dedicated msg.sender to whitelist
 const { address, isDeployed } = await gelatoOps.getDedicatedMsgSender()
 ```
 
+If `dedicatedMsgSender: false`, the `msg.sender` of the task will be Ops contract.
 
 ## Manage your tasks
 
