@@ -40,6 +40,6 @@
     "*.*{ts,js}": "eslint -c .eslintrc.json"
   },
   "dependencies": {
-    "@gelatonetwork/ops-sdk": "^1.0.0"
+    "@gelatonetwork/ops-sdk": "^2.0.3"
   }
 }
