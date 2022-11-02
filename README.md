@@ -27,7 +27,7 @@ yarn install
 2. Create a `.env` file with your private config:
 ```
 PRIVATE_KEY= 
-ALCHEMY_ID= <- required for ropsten & rinkeby
+ALCHEMY_ID= <- required for goerli
 ```
 
 ## Deploy a contract & automate your function call
@@ -52,7 +52,7 @@ ALCHEMY_ID= <- required for ropsten & rinkeby
 
 - Check the example source code [`examples/deploy-create-task.ts`](./examples/deploy-create-task.ts) and try it yourself using:
 ```
-yarn run deploy-create-task --network rinkeby
+yarn run deploy-create-task --network goerli
 ```
 
 
@@ -78,7 +78,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
 
 - Check the example source code [`examples/create-task-predefined-input.ts`](./examples/create-task-predefined-input.ts) and try it yourself using:
 ```
-yarn run create-task-predefined-input --network rinkeby
+yarn run create-task-predefined-input --network goerli
 ```
 <br/>
 
@@ -105,7 +105,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
 
 - Check the example source code [`examples/create-task-with-resolver.ts`](./examples/create-task-with-resolver.ts) and try it yourself using:
 ```
-yarn run create-task-with-resolver --network rinkeby
+yarn run create-task-with-resolver --network goerli
 ```
 <br/>
 
@@ -135,7 +135,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
 
 - Check the example source code [`examples/create-timed-task.ts`](./examples/create-timed-task.ts) and try it yourself using:
 ```
-yarn run create-timed-task --network rinkeby
+yarn run create-timed-task --network goerli
 ```
 <br/>
 
@@ -165,7 +165,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
 
 - Check the example source code [`examples/create-timed-task-with-resolver.ts`](./examples/create-timed-task-with-resolver.ts) and try it yourself using:
 ```
-yarn run create-timed-task-with-resolver --network rinkeby
+yarn run create-timed-task-with-resolver --network goerli
 ```
 <br/>
 
@@ -193,7 +193,7 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
 
 - Check the example source code [`examples/create-self-paying-task.ts`](./examples/create-self-paying-task.ts) and try it yourself using:
 ```
-yarn run create-self-paying-task --network rinkeby
+yarn run create-self-paying-task --network goerli
 ```
 <br/>
 
@@ -221,6 +221,6 @@ await gelatoOps.cancelTask(task.taskId);
 
 - Check the example source code [`examples/manage-tasks.ts`](./examples/manage-tasks.ts) and try it yourself using:
 ```
-yarn run manage-tasks --network rinkeby
+yarn run manage-tasks --network goerli
 ```
 <br/>
