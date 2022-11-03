@@ -3,7 +3,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pokeMe",
+        "name": "_ops",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_taskCreator",
         "type": "address"
       }
     ],
@@ -12,12 +17,17 @@
   },
   {
     "inputs": [],
-    "name": "ETH",
+    "name": "checker",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        "internalType": "bool",
+        "name": "canExec",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "execPayload",
+        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -38,10 +48,10 @@
   },
   {
     "inputs": [],
-    "name": "gelato",
+    "name": "dedicatedMsgSender",
     "outputs": [
       {
-        "internalType": "address payable",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -77,19 +87,15 @@
   },
   {
     "inputs": [],
-    "name": "pokeMe",
+    "name": "ops",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IOps",
         "name": "",
         "type": "address"
       }
     ],
     "stateMutability": "view",
     "type": "function"
-  },
-  {
-    "stateMutability": "payable",
-    "type": "receive"
   }
 ]
