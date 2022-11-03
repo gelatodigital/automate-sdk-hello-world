@@ -3,25 +3,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pokeMe",
+        "name": "_ops",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_taskCreator",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "inputs": [],
-    "name": "ETH",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -38,10 +30,10 @@
   },
   {
     "inputs": [],
-    "name": "gelato",
+    "name": "dedicatedMsgSender",
     "outputs": [
       {
-        "internalType": "address payable",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -77,10 +69,10 @@
   },
   {
     "inputs": [],
-    "name": "pokeMe",
+    "name": "ops",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IOps",
         "name": "",
         "type": "address"
       }
