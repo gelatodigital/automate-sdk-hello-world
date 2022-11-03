@@ -2,13 +2,26 @@
   {
     "inputs": [
       {
-        "internalType": "contract ICounter",
+        "internalType": "address",
         "name": "_counter",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "COUNTER",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -23,19 +36,6 @@
         "internalType": "bytes",
         "name": "execPayload",
         "type": "bytes"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "counter",
-    "outputs": [
-      {
-        "internalType": "contract ICounter",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
