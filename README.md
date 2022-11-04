@@ -8,6 +8,8 @@ Example task automation using Gelato Ops SDK:
   - [3. Time based execution](#3-time-based-execution)
   - [4. Time based execution using a resolver for dynamic input](#4-time-based-execution-using-a-resolver-for-dynamic-input)
   - [5. Self paying task](#5-self-paying-task)
+  - [6. Single execution tasks](#6-single-execution-tasks)
+- [`msg.sender` of task executions](#msgsender-of-task-executions)
 - [Manage your tasks](#manage-your-tasks)
 
   
@@ -27,7 +29,7 @@ yarn install
 2. Create a `.env` file with your private config:
 ```
 PRIVATE_KEY= 
-ALCHEMY_ID= <- required for ropsten & rinkeby
+ALCHEMY_ID= <- required for goerli
 ```
 
 ## Deploy a contract & automate your function call
@@ -47,12 +49,13 @@ ALCHEMY_ID= <- required for ropsten & rinkeby
     execAbi: counter.interface.format("json") as string,
     interval: 10 * 60, // execute every 10 minutes
     name: "Automated counter every 10min",
+    dedicatedMsgSender: true
   });
 ```
 
 - Check the example source code [`examples/deploy-create-task.ts`](./examples/deploy-create-task.ts) and try it yourself using:
 ```
-yarn run deploy-create-task --network rinkeby
+yarn run deploy-create-task --network goerli
 ```
 
 
@@ -73,12 +76,13 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execSelector: selector,
   execData: data,
   name: "Automated Counter with pre-defined input",
+  dedicatedMsgSender: true
 });
 ```
 
 - Check the example source code [`examples/create-task-predefined-input.ts`](./examples/create-task-predefined-input.ts) and try it yourself using:
 ```
-yarn run create-task-predefined-input --network rinkeby
+yarn run create-task-predefined-input --network goerli
 ```
 <br/>
 
@@ -89,23 +93,23 @@ yarn run create-task-predefined-input --network rinkeby
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   name: "Automated counter using resolver",
+  dedicatedMsgSender: true
 });
 ```
 
 - Check the example source code [`examples/create-task-with-resolver.ts`](./examples/create-task-with-resolver.ts) and try it yourself using:
 ```
-yarn run create-task-with-resolver --network rinkeby
+yarn run create-task-with-resolver --network goerli
 ```
 <br/>
 
@@ -130,12 +134,13 @@ const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   startTime, // starting timestamp in seconds
   interval, // execution interval in seconds
   name: "Automated counter every 5min",
+  dedicatedMsgSender: true
 });
 ```
 
 - Check the example source code [`examples/create-timed-task.ts`](./examples/create-timed-task.ts) and try it yourself using:
 ```
-yarn run create-timed-task --network rinkeby
+yarn run create-timed-task --network goerli
 ```
 <br/>
 
@@ -146,9 +151,8 @@ yarn run create-timed-task --network rinkeby
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 const interval = 5 * 60; // exec every 5 minutes
 
 // Create task
@@ -156,16 +160,17 @@ console.log("Creating Timed Task...");
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   interval, // execution interval in seconds
   name: "Automated counter with resolver every 5min",
+  dedicatedMsgSender: true
 });
 ```
 
 - Check the example source code [`examples/create-timed-task-with-resolver.ts`](./examples/create-timed-task-with-resolver.ts) and try it yourself using:
 ```
-yarn run create-timed-task-with-resolver --network rinkeby
+yarn run create-timed-task-with-resolver --network goerli
 ```
 <br/>
 
@@ -175,27 +180,61 @@ yarn run create-timed-task-with-resolver --network rinkeby
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_WITHOUT_TREASURY_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_WITHOUT_TREASURY_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
 console.log("Creating Task...");
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   useTreasury: false,
   name: "Automated Counter without treasury",
+  dedicatedMsgSender: true
 });
 ```
 
 - Check the example source code [`examples/create-self-paying-task.ts`](./examples/create-self-paying-task.ts) and try it yourself using:
 ```
-yarn run create-self-paying-task --network rinkeby
+yarn run create-self-paying-task --network opgoerli
 ```
 <br/>
+
+### 6. Single execution tasks
+
+- Use `gelatoOps.createTask` and set `singleExec: true` for tasks that only need to be executed once. The task is automatically cancelled on the first execution.
+```ts
+// Prepare Task data to automate
+const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
+const selector = counter.interface.getSighash("increaseCount(uint256)");
+const resolverData = counter.interface.getSighash("checker()");
+
+// Create task
+const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+  execAddress: counter.address,
+  execSelector: selector,
+  resolverAddress: counter.address,
+  resolverData: resolverData,
+  dedicatedMsgSender: true,
+  name: "Automated counter using resolver",
+  dedicatedMsgSender: true,
+  singleExec: true
+});
+```
+
+## `msg.sender` of task executions
+
+If you set `dedicatedMsgSender: true`, your task will be called via a dedicated `msg.sender` which you can whitelist on your smart contract for extra security.
+
+To get your dedicated `msg.sender` :
+```ts
+// Get dedicated msg.sender to whitelist
+const { address, isDeployed } = await gelatoOps.getDedicatedMsgSender()
+```
+
+If `dedicatedMsgSender: false`, the `msg.sender` of the task will be Ops contract.
 
 ## Manage your tasks
 
@@ -221,6 +260,6 @@ await gelatoOps.cancelTask(task.taskId);
 
 - Check the example source code [`examples/manage-tasks.ts`](./examples/manage-tasks.ts) and try it yourself using:
 ```
-yarn run manage-tasks --network rinkeby
+yarn run manage-tasks --network goerli
 ```
 <br/>

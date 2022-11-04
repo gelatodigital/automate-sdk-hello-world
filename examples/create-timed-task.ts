@@ -2,7 +2,7 @@ import hre from "hardhat";
 import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction } from "@gelatonetwork/ops-sdk";
 import { Contract } from "ethers";
 import { COUNTER_ADDRESSES } from "../constants";
-import counterAbi from "../contracts/abis/Counter.json";
+import counterAbi from "../contracts/abis/CounterTest.json";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
@@ -32,6 +32,7 @@ async function main() {
     startTime,
     interval,
     name: "Automated counter every 5min",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);

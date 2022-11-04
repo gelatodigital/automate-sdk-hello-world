@@ -13,7 +13,7 @@ async function main() {
   const gelatoOps = new GelatoOpsSDK(chainId, signer);
 
   // Deploying Counter contract
-  const counterFactory = await hre.ethers.getContractFactory("Counter");
+  const counterFactory = await hre.ethers.getContractFactory("CounterTest");
   console.log("Deploying Counter...");
   const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].ops);
   await counter.deployed();
@@ -28,6 +28,7 @@ async function main() {
     execAbi: counter.interface.format("json") as string,
     interval: 10 * 60, // execute every 10 minutes
     name: "Automated counter every 10min",
+    dedicatedMsgSender: true,
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);
