@@ -2,7 +2,7 @@ import hre from "hardhat";
 import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction } from "@gelatonetwork/ops-sdk";
 import { Contract } from "ethers";
 import { COUNTER_ADDRESSES } from "../constants";
-import counterAbi from "../contracts/abis/Counter.json";
+import counterAbi from "../contracts/abis/CounterTest.json";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;

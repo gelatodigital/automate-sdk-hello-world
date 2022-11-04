@@ -13,7 +13,7 @@ async function main() {
   const gelatoOps = new GelatoOpsSDK(chainId, signer);
 
   // Deploying Counter contract
-  const counterFactory = await hre.ethers.getContractFactory("Counter");
+  const counterFactory = await hre.ethers.getContractFactory("CounterTest");
   console.log("Deploying Counter...");
   const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].ops);
   await counter.deployed();

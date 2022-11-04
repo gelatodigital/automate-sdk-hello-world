@@ -1,9 +1,8 @@
 import hre from "hardhat";
 import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction } from "@gelatonetwork/ops-sdk";
 import { Contract } from "ethers";
-import { COUNTER_ADDRESSES, COUNTER_RESOLVER_ADDRESSES } from "../constants";
-import counterAbi from "../contracts/abis/Counter.json";
-import counterResolverAbi from "../contracts/abis/CounterResolver.json";
+import { COUNTER_ADDRESSES } from "../constants";
+import counterAbi from "../contracts/abis/CounterTest.json";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
@@ -18,9 +17,8 @@ async function main() {
 
   // Prepare Task data to automate
   const counter = new Contract(COUNTER_ADDRESSES[chainId], counterAbi, signer);
-  const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES[chainId], counterResolverAbi, signer);
   const selector = counter.interface.getSighash("increaseCount(uint256)");
-  const resolverData = resolver.interface.getSighash("checker()");
+  const resolverData = counter.interface.getSighash("checker()");
 
   // Create task
   console.log("Creating Task...");
@@ -28,9 +26,9 @@ async function main() {
     execAddress: counter.address,
     execSelector: selector,
     execAbi: JSON.stringify(counterAbi),
-    resolverAddress: resolver.address,
+    resolverAddress: counter.address,
     resolverData: resolverData,
-    resolverAbi: JSON.stringify(counterResolverAbi),
+    resolverAbi: JSON.stringify(counterAbi),
     name: "Automated counter with resolver",
     dedicatedMsgSender: true,
   });
