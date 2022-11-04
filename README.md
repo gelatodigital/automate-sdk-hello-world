@@ -93,15 +93,14 @@ yarn run create-task-predefined-input --network goerli
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   name: "Automated counter using resolver",
   dedicatedMsgSender: true
@@ -152,9 +151,8 @@ yarn run create-timed-task --network goerli
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 const interval = 5 * 60; // exec every 5 minutes
 
 // Create task
@@ -162,7 +160,7 @@ console.log("Creating Timed Task...");
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   interval, // execution interval in seconds
   name: "Automated counter with resolver every 5min",
@@ -182,16 +180,15 @@ yarn run create-timed-task-with-resolver --network goerli
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_WITHOUT_TREASURY_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_WITHOUT_TREASURY_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
 console.log("Creating Task...");
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   useTreasury: false,
   name: "Automated Counter without treasury",
@@ -211,15 +208,14 @@ yarn run create-self-paying-task --network opgoerli
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
-const resolver = new Contract(COUNTER_RESOLVER_ADDRESSES, counterResolverAbi, signer);
 const selector = counter.interface.getSighash("increaseCount(uint256)");
-const resolverData = resolver.interface.getSighash("checker()");
+const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
 const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
   execAddress: counter.address,
   execSelector: selector,
-  resolverAddress: resolver.address,
+  resolverAddress: counter.address,
   resolverData: resolverData,
   dedicatedMsgSender: true,
   name: "Automated counter using resolver",
