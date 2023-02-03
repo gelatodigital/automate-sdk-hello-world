@@ -1,6 +1,6 @@
-# Gelato Ops SDK Hello World <!-- omit in toc -->
+# Gelato Automate SDK Hello World <!-- omit in toc -->
 
-Example task automation using Gelato Ops SDK:
+Example task automation using Gelato Automate SDK:
 - [Deploy a contract & automate your function call](#deploy-a-contract--automate-your-function-call)
 - [Configure your task execution:](#configure-your-task-execution)
   - [1. Use pre-define input (run whenever possible)](#1-use-pre-define-input-run-whenever-possible)
@@ -15,7 +15,7 @@ Example task automation using Gelato Ops SDK:
   
 ## Prerequisite  <!-- omit in toc -->
 
-- Check [ops-sdk](https://www.npmjs.com/package/@gelatonetwork/ops-sdk) npm package page to know more about how to use the Gelato Ops SDK
+- Check [automate-sdk](https://www.npmjs.com/package/@gelatonetwork/automate-sdk) npm package page to know more about how to use the Gelato Automate SDK
 <br/><br/>
 
 
@@ -34,15 +34,15 @@ ALCHEMY_ID= <- required for goerli
 
 ## Deploy a contract & automate your function call
 
-- Use `gelatoOps.createTask` and specify your contract call with `execAddress`, `execSelector` & `execData`:
+- Use `automate.createTask` and specify your contract call with `execAddress`, `execSelector` & `execData`:
 ```ts
   // Deploying Counter contract
   const counterFactory = await hre.ethers.getContractFactory("Counter");
-  const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].ops);
+  const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].automate);
   await counter.deployed();
 
   // Call Counter.increaseCount(42) every 10 minutes
-  const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+  const { taskId, tx }: TaskTransaction = await automate.createTask({
     execAddress: counter.address,
     execSelector: counter.interface.getSighash("increaseCount(uint256)"),
     execData: counter.interface.encodeFunctionData("increaseCount", [42]),
@@ -63,7 +63,7 @@ yarn run deploy-create-task --network goerli
 
 ### 1. Use pre-define input (run whenever possible)
 
-- Use `gelatoOps.createTask` and specify your contract call with `execAddress`, `execSelector` & `execData`:
+- Use `automate.createTask` and specify your contract call with `execAddress`, `execSelector` & `execData`:
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -71,7 +71,7 @@ const selector = counter.interface.getSighash("increaseCount(uint256)");
 const data = counter.interface.encodeFunctionData("increaseCount", [42]);
 
 // Create task
-const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await automate.createTask({
   execAddress: counter.address,
   execSelector: selector,
   execData: data,
@@ -89,7 +89,7 @@ yarn run create-task-predefined-input --network goerli
 
 ### 2. Use dynamic input with a resolver contract
 
-- Use `gelatoOps.createTask` and specify your resolver function with `resolverAddress` & `resolverData`:
+- Use `automate.createTask` and specify your resolver function with `resolverAddress` & `resolverData`:
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -97,7 +97,7 @@ const selector = counter.interface.getSighash("increaseCount(uint256)");
 const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
-const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await automate.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: counter.address,
@@ -116,7 +116,7 @@ yarn run create-task-with-resolver --network goerli
 
 ### 3. Time based execution 
 
-- Use `gelatoOps.createTask` with your execution `interval` & set your optional `startTime`:
+- Use `automate.createTask` with your execution `interval` & set your optional `startTime`:
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -127,7 +127,7 @@ const interval = 5 * 60; // exec every 5 minutes
 
 // Create task
 console.log("Creating Timed Task...");
-const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await automate.createTask({
   execAddress: counter.address,
   execSelector: selector,
   execData,
@@ -147,7 +147,7 @@ yarn run create-timed-task --network goerli
 
 ### 4. Time based execution using a resolver for dynamic input
 
-- Use `gelatoOps.createTask` with your execution `interval` & set your resolver function with `resolverAddress` & `resolverData`:
+- Use `automate.createTask` with your execution `interval` & set your resolver function with `resolverAddress` & `resolverData`:
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -157,7 +157,7 @@ const interval = 5 * 60; // exec every 5 minutes
 
 // Create task
 console.log("Creating Timed Task...");
-const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await automate.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: counter.address,
@@ -176,7 +176,7 @@ yarn run create-timed-task-with-resolver --network goerli
 
 ### 5. Self paying task 
 
-- Use `gelatoOps.createTask` and set `useTreasury: false` to let the task pay for itself:
+- Use `automate.createTask` and set `useTreasury: false` to let the task pay for itself:
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_WITHOUT_TREASURY_ADDRESSES, counterAbi, signer);
@@ -185,7 +185,7 @@ const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
 console.log("Creating Task...");
-const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await automate.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: counter.address,
@@ -204,7 +204,7 @@ yarn run create-self-paying-task --network opgoerli
 
 ### 6. Single execution tasks
 
-- Use `gelatoOps.createTask` and set `singleExec: true` for tasks that only need to be executed once. The task is automatically cancelled on the first execution.
+- Use `automate.createTask` and set `singleExec: true` for tasks that only need to be executed once. The task is automatically cancelled on the first execution.
 ```ts
 // Prepare Task data to automate
 const counter = new Contract(COUNTER_ADDRESSES, counterAbi, signer);
@@ -212,7 +212,7 @@ const selector = counter.interface.getSighash("increaseCount(uint256)");
 const resolverData = counter.interface.getSighash("checker()");
 
 // Create task
-const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+const { taskId, tx }: TaskTransaction = await automate.createTask({
   execAddress: counter.address,
   execSelector: selector,
   resolverAddress: counter.address,
@@ -231,31 +231,31 @@ If you set `dedicatedMsgSender: true`, your task will be called via a dedicated 
 To get your dedicated `msg.sender` :
 ```ts
 // Get dedicated msg.sender to whitelist
-const { address, isDeployed } = await gelatoOps.getDedicatedMsgSender()
+const { address, isDeployed } = await automate.getDedicatedMsgSender()
 ```
 
-If `dedicatedMsgSender: false`, the `msg.sender` of the task will be Ops contract.
+If `dedicatedMsgSender: false`, the `msg.sender` of the task will be Automate contract.
 
 ## Manage your tasks
 
-- Use `gelatoOps.getActiveTasks` to retrieve all active that you created:
+- Use `automate.getActiveTasks` to retrieve all active that you created:
 ```ts
-const activeTasks = await gelatoOps.getActiveTasks();
+const activeTasks = await automate.getActiveTasks();
 activeTasks.forEach((task: Task) => {
   console.log(`- ${task.name} (${task.taskId})`);
 });
 ```
 
-- Use `gelatoOps.renameTask` to rename one of your task:
+- Use `automate.renameTask` to rename one of your task:
 ```ts
 const task: Task = activeTasks[0];
-await gelatoOps.renameTask(task.taskId, `[RENAMED] ${task.name}`);
+await automate.renameTask(task.taskId, `[RENAMED] ${task.name}`);
 ```
 
-- Use `gelatoOps.cancelTask` to cancel one of your task:
+- Use `automate.cancelTask` to cancel one of your task:
 ```ts
 const task: Task = activeTasks[0];
-await gelatoOps.cancelTask(task.taskId);
+await automate.cancelTask(task.taskId);
 ```
 
 - Check the example source code [`examples/manage-tasks.ts`](./examples/manage-tasks.ts) and try it yourself using:

@@ -1,7 +1,7 @@
 {
-  "name": "ops-sdk-hello-world",
+  "name": "automate-sdk-hello-world",
   "version": "0.0.1",
-  "description": "Create Hello World tasks using Gelato Ops SDK",
+  "description": "Create Hello World tasks using Gelato Automate SDK",
   "scripts": {
     "format": "prettier --write '*/**/*.*{js,json,md,ts}'",
     "format:check": "prettier --check '*/**/*.*{js,json,md,ts}'",
@@ -40,6 +40,6 @@
     "*.*{ts,js}": "eslint -c .eslintrc.json"
   },
   "dependencies": {
-    "@gelatonetwork/ops-sdk": "^2.0.3"
+    "@gelatonetwork/automate-sdk": "^2.0.3"
   }
 }
