@@ -1,19 +1,19 @@
 import hre from "hardhat";
-import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction } from "@gelatonetwork/ops-sdk";
+import { AutomateSDK, isAutomateSupported, TaskTransaction } from "@gelatonetwork/automate-sdk";
 import { Contract } from "ethers";
 import { COUNTER_ADDRESSES } from "../constants";
 import counterAbi from "../contracts/abis/CounterTest.json";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
-  if (!isGelatoOpsSupported(chainId)) {
-    console.log(`Gelato Ops network not supported (${chainId})`);
+  if (!isAutomateSupported(chainId)) {
+    console.log(`Gelato Automate network not supported (${chainId})`);
     return;
   }
 
-  // Init GelatoOpsSDK
+  // Init AutomateSDK
   const [signer] = await hre.ethers.getSigners();
-  const gelatoOps = new GelatoOpsSDK(chainId, signer);
+  const automate = new AutomateSDK(chainId, signer);
 
   // Prepare Task data to automate
   const counter = new Contract(COUNTER_ADDRESSES[chainId], counterAbi, signer);
@@ -24,7 +24,7 @@ async function main() {
 
   // Create task
   console.log("Creating Task...");
-  const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+  const { taskId, tx }: TaskTransaction = await automate.createTask({
     execAddress: counter.address,
     execSelector: selector,
     execData,

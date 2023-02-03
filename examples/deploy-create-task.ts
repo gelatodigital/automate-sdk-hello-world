@@ -1,27 +1,27 @@
 import hre from "hardhat";
-import { GelatoOpsSDK, isGelatoOpsSupported, TaskTransaction, GELATO_ADDRESSES } from "@gelatonetwork/ops-sdk";
+import { AutomateSDK, isAutomateSupported, TaskTransaction, GELATO_ADDRESSES } from "@gelatonetwork/automate-sdk";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
-  if (!isGelatoOpsSupported(chainId)) {
-    console.log(`Gelato Ops network not supported (${chainId})`);
+  if (!isAutomateSupported(chainId)) {
+    console.log(`Gelato Automate network not supported (${chainId})`);
     return;
   }
 
-  // Init GelatoOpsSDK
+  // Init AutomateSDK
   const [signer] = await hre.ethers.getSigners();
-  const gelatoOps = new GelatoOpsSDK(chainId, signer);
+  const automate = new AutomateSDK(chainId, signer);
 
   // Deploying Counter contract
   const counterFactory = await hre.ethers.getContractFactory("CounterTest");
   console.log("Deploying Counter...");
-  const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].ops);
+  const counter = await counterFactory.deploy(GELATO_ADDRESSES[chainId].automate);
   await counter.deployed();
   console.log("Counter deployed to:", counter.address);
 
   // Create Gelato automated ask
   console.log("Creating Task...");
-  const { taskId, tx }: TaskTransaction = await gelatoOps.createTask({
+  const { taskId, tx }: TaskTransaction = await automate.createTask({
     execAddress: counter.address,
     execSelector: counter.interface.getSighash("increaseCount(uint256)"),
     execData: counter.interface.encodeFunctionData("increaseCount", [42]),
