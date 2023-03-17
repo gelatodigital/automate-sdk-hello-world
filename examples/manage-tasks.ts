@@ -1,19 +1,19 @@
 import hre from "hardhat";
-import { GelatoOpsSDK, isGelatoOpsSupported, Task, TaskTransaction } from "@gelatonetwork/ops-sdk";
+import { AutomateSDK, isAutomateSupported, Task, TaskTransaction } from "@gelatonetwork/automate-sdk";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
-  if (!isGelatoOpsSupported(chainId)) {
-    console.log(`Gelato Ops network not supported (${chainId})`);
+  if (!isAutomateSupported(chainId)) {
+    console.log(`Gelato Automate network not supported (${chainId})`);
     return;
   }
 
-  // Init GelatoOpsSDK
+  // Init AutomateSDK
   const [signer] = await hre.ethers.getSigners();
-  const gelatoOps = new GelatoOpsSDK(chainId, signer);
+  const automate = new AutomateSDK(chainId, signer);
 
   // Retrieve active tasks
-  const activeTasks = await gelatoOps.getActiveTasks();
+  const activeTasks = await automate.getActiveTasks();
   if (activeTasks.length === 0) {
     console.log("No active tasks");
     return;
@@ -27,13 +27,13 @@ async function main() {
   // Rename a task
   const task: Task = activeTasks[0];
   const newName = `[RENAMED] ${task.name}`;
-  await gelatoOps.renameTask(task.taskId, newName);
+  await automate.renameTask(task.taskId, newName);
   console.log(`Task renamed, taskId: ${task.taskId} - ${newName}`);
   console.log(`> https://app.gelato.network/task/${task.taskId}?chainId=${chainId}`);
 
   // Cancel a task
   console.log(`Canceling task...`);
-  const { taskId, tx }: TaskTransaction = await gelatoOps.cancelTask(task.taskId);
+  const { taskId, tx }: TaskTransaction = await automate.cancelTask(task.taskId);
   await tx.wait();
   console.log(`Task canceled, taskId: ${taskId} (tx hash: ${tx.hash})`);
   console.log(`> https://app.gelato.network/task/${taskId}?chainId=${chainId}`);
