@@ -1,5 +1,11 @@
+import {
+  AutomateSDK,
+  GELATO_ADDRESSES,
+  TaskTransaction,
+  TriggerType,
+  isAutomateSupported,
+} from "@gelatonetwork/automate-sdk";
 import hre from "hardhat";
-import { AutomateSDK, isAutomateSupported, TaskTransaction, GELATO_ADDRESSES } from "@gelatonetwork/automate-sdk";
 
 async function main() {
   const chainId = hre.network.config.chainId as number;
@@ -26,7 +32,10 @@ async function main() {
     execSelector: counter.interface.getSighash("increaseCount(uint256)"),
     execData: counter.interface.encodeFunctionData("increaseCount", [42]),
     execAbi: counter.interface.format("json") as string,
-    interval: 10 * 60, // execute every 10 minutes
+    trigger: {
+      interval: 60 * 10 * 1000,
+      type: TriggerType.TIME,
+    },
     name: "Automated counter every 10min",
     dedicatedMsgSender: true,
   });
