@@ -1,6 +1,6 @@
-import hre from "hardhat";
-import { AutomateSDK, isAutomateSupported, TaskTransaction } from "@gelatonetwork/automate-sdk";
+import { AutomateSDK, isAutomateSupported, TaskTransaction, TriggerType } from "@gelatonetwork/automate-sdk";
 import { Contract } from "ethers";
+import hre from "hardhat";
 import { COUNTER_ADDRESSES } from "../constants";
 import counterAbi from "../contracts/abis/CounterTest.json";
 
@@ -19,8 +19,8 @@ async function main() {
   const counter = new Contract(COUNTER_ADDRESSES[chainId], counterAbi, signer);
   const selector = counter.interface.getSighash("increaseCount(uint256)");
   const execData = counter.interface.encodeFunctionData("increaseCount", [42]);
-  const startTime = Math.floor(Date.now() / 1000) + 60; // start in 1 minute
-  const interval = 5 * 60; // exec every 5 minutes
+  const startTime = Date.now() + 60 * 1000; // start in 1 minute
+  const interval = 5 * 100 * 60; // exec every 5 minutes
 
   // Create task
   console.log("Creating Task...");
@@ -29,8 +29,11 @@ async function main() {
     execSelector: selector,
     execData,
     execAbi: JSON.stringify(counterAbi),
-    startTime,
-    interval,
+    trigger: {
+      start: startTime,
+      interval,
+      type: TriggerType.TIME,
+    },
     name: "Automated counter every 5min",
     dedicatedMsgSender: true,
   });

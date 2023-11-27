@@ -1,6 +1,6 @@
-import hre from "hardhat";
-import { AutomateSDK, isAutomateSupported, TaskTransaction } from "@gelatonetwork/automate-sdk";
+import { AutomateSDK, isAutomateSupported, TaskTransaction, TriggerType } from "@gelatonetwork/automate-sdk";
 import { Contract } from "ethers";
+import hre from "hardhat";
 import { COUNTER_ADDRESSES } from "../constants";
 import counterAbi from "../contracts/abis/CounterTest.json";
 
@@ -31,6 +31,10 @@ async function main() {
     resolverAbi: JSON.stringify(counterAbi),
     name: "Automated counter with resolver",
     dedicatedMsgSender: true,
+    trigger: {
+      interval: 60 * 1000,
+      type: TriggerType.TIME,
+    },
   });
   await tx.wait();
   console.log(`Task created, taskId: ${taskId} (tx hash: ${tx.hash})`);
